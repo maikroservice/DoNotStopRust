@@ -8,5 +8,5 @@ use std::io::{stdout, BufWriter, Write};
 
 #[tokio::main]
 async fn main() {
-    println!("Hello, world!");
+    println!("{*:}");
 }
