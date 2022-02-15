@@ -16,7 +16,7 @@ Moving backwards, we now know about the authoritive nameserver that points us to
 
 ## DNS Queries
 
-We query for `https://www.maikroservice.com`.
+We query for `https://www.maikroservice.com`
 
 1. we start with our local machine - here we might have a cache of locally stored domain/IP lists that get queried first
 2. If we don't find the results locally, we reach out to our Internet Service Provider (ISP) and check if they have the corresponding record
@@ -27,9 +27,9 @@ We query for `https://www.maikroservice.com`.
 
 We have two types of DNS Queries:
 
-Non-recursive DNS Queries - these are typical for when the client already knows the authoritive server (the one that is aware of things inside the toplevel domain server - `maikroservice` inside the `.com`) - they would not be recursive because the answer either is there or not available.
+`Non-recursive DNS Queries` - these are typical for when the client already knows the authoritive server (the one that is aware of things inside the toplevel domain server - `maikroservice` inside the `.com`) - they would not be recursive because the answer either is there or not available.
 
-DNS query (with a recursive flag set) - in case the e.g. 2nd-level domain/toplevel domain is unknown we need to forward our request and thus need to recurse into the depths of DNS servers.
+`DNS query (with a recursive flag set)` - in case the e.g. 2nd-level domain/toplevel domain is unknown we need to forward our request and thus need to recurse into the depths of DNS servers.
 
 ## Records
 
