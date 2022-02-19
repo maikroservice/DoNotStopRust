@@ -31,6 +31,56 @@ We have two types of DNS Queries:
 
 `DNS query (with a recursive flag set)` - in case the e.g. 2nd-level domain/toplevel domain is unknown we need to forward our request and thus need to recurse into the depths of DNS servers.
 
+Inverse Query - retrieve the domain name for an IP address
+
+## DNS Request:
+
+Usually done with `UDP` via port 53, and only uses `TCP` for zone transfer requests - [RFC 1035](https://www.rfc-editor.org/rfc/rfc1035).
+
+### UDP:53
+
+What does a request look like? Where do we sent it to? What do we get as a response?
+
+### TCP:53
+
+Is the request the same as for the UDP counter-part?
+
+### HTTPS
+
+What in god's name is this? Why is there another port and when do we use this?
+OHHHH - this is for encrypting the traffic, because otherwise it would be clear text :O
+
+```text
+Inverse Query:
+
+                         +-----------------------------------------+
+           Header        |          OPCODE=IQUERY, ID=997          |
+                         +-----------------------------------------+
+          Question       |                 <empty>                 |
+                         +-----------------------------------------+
+           Answer        |        <anyname> A IN <IP-address>      |
+                         +-----------------------------------------+
+          Authority      |                 <empty>                 |
+                         +-----------------------------------------+
+         Additional      |                 <empty>                 |
+                         +-----------------------------------------+
+```
+
+```text
+Response:
+                         +-----------------------------------------+
+           Header        |         OPCODE=RESPONSE, ID=997         |
+                         +-----------------------------------------+
+          Question       |QTYPE=A, QCLASS=IN, QNAME=VENERA.ISI.EDU |
+                         +-----------------------------------------+
+           Answer        |  VENERA.ISI.EDU  A IN 10.1.0.52         |
+                         +-----------------------------------------+
+          Authority      |                 <empty>                 |
+                         +-----------------------------------------+
+         Additional      |                 <empty>                 |
+                         +-----------------------------------------+
+```
+
 ## Records
 
 We have different records:
@@ -52,3 +102,4 @@ We have different records:
 What are Name Servers?
 How do we identify Name Servers?
 Is there a list of Name Servers that we can use? https://public-dns.info/nameserver/nameservers.json
+DNS works mostly via UDP
