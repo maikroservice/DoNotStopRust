@@ -1,8 +1,19 @@
 # This is a DNS Resolver, written in Rust
 
-Inspired by [TheMayor's](https://github.com/dievus) built your own tooling series, I wanted to learn Rust and build my own tooling to do so.
+Inspired by [TheMayor's](https://github.com/dievus) built your own tooling series, I want to build my own tooling to learn Rust.
 
 So we start with a DNS Resolver and subsequently look into other parts of the attack toolkit.
+
+## TODOS:
+
+1. open file and use python-generator like iterator to pass to the DNS resolver
+1. write responses to file
+1. what do we do with errors, no-response?
+1. how do we query different records and not just A/AAAA?
+1. can we do recursive lookup?
+1. how do we handle multiple IPs per host?
+1. can we do reverse lookup (provide IP - get hostname?)
+1.
 
 ## Introduction
 
@@ -47,8 +58,13 @@ Is the request the same as for the UDP counter-part?
 
 ### HTTPS
 
+DoH or DNS over HTTPS
 What in god's name is this? Why is there another port and when do we use this?
 OHHHH - this is for encrypting the traffic, because otherwise it would be clear text :O
+
+### TLS
+
+DoT or DNS over TLS
 
 ```text
 Inverse Query:

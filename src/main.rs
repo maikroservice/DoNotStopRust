@@ -1,37 +1,41 @@
-//#![deny(warnings)]
-
-// mod args;
-
-// use crate::args::Args;
-// use clap::Parser;
-//use std::io::{stdout, BufWriter, Write};
-use std::net;
-use std::str;
-
-// shameless plug: https://gist.github.com/lanedraex/bc01eb399614359470cfacc9d95993fb
-// we connect to the google nameserver via UDP on port 53 and lets see what happens
+use std::env;
+use trust_dns_resolver::config::*;
+use trust_dns_resolver::Resolver;
 
 fn main() {
-    //println!("1");
-    // https://jan.newmarch.name/NetworkProgramming/UDP/wrapper.html?rust
-    let _nameserver = "8.8.8.8:53";
-    let test = "we love hacking";
-    let home = "127.0.0.1:34254";
-    let socket = net::UdpSocket::bind("0.0.0.0:34254").expect("failed to establish connection");
-    //println!("2");
-    let mut buf = [0; 512];
-    //socket.send_to(&buf, &home).expect("couldn't send data");
-    //socket.connect(home).expect("could not connect");
-    //socket.send(&[0, 1, 2]).expect("couldn't send message");
-    socket
-        .send_to(test.as_bytes(), home)
-        .expect("Error on send");
-
-    //println!("3");
-    loop {
-        let (amt, _src) = socket.recv_from(&mut buf).expect("could not receive");
-        //println!("4");
-        let echo = str::from_utf8(&buf[..amt]).unwrap();
-        println!("received: {}", echo);
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        println!("Usage {} hostname", args[0]);
+        std::process::exit(1);
     }
+    let hostname = &args[1];
+
+    // Construct a new Resolver with default configuration options
+    // Default gets IPv4 and then IPv6
+    let mut opts = ResolverOpts::default();
+    match opts.ip_strategy {
+        LookupIpStrategy::Ipv4Only => println!("IPv4 only"),
+        LookupIpStrategy::Ipv6Only => println!("IPv6 only"),
+        LookupIpStrategy::Ipv4AndIpv6 => println!("IPv4 and v6"),
+        LookupIpStrategy::Ipv6thenIpv4 => println!("IPv6 then 4"),
+        LookupIpStrategy::Ipv4thenIpv6 => println!("IPv4 then 6"),
+    }
+    // then change to find both
+    opts.ip_strategy = LookupIpStrategy::Ipv4AndIpv6;
+
+    let resolver = Resolver::new(ResolverConfig::default(), opts).unwrap();
+
+    let response = resolver.lookup_ip(hostname);
+    match response {
+        Ok(resp) => {
+            for a in resp.iter() {
+                println!("addr {}", a);
+            }
+        }
+        Err(err) => {
+            println!("err {}", err);
+            std::process::exit(2)
+        }
+    }
+    std::process::exit(0);
 }
